@@ -1,0 +1,24 @@
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+ext["signing.gpgKeyId"] = properties["signing.gpgKeyId"]
+ext["signing.gpgPassphrase"] = properties["signing.gpgPassphrase"]
+ext["signing.gpgFile"] = properties["signing.gpgFile"]
+ext["ossrhUsername"] = properties["ossrhUsername"]
+ext["ossrhPassword"] = properties["ossrhPassword"]
+ext["sonatypeStagingProfileId"] = properties["sonatypeStagingProfileId"]
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+
+            /* Existing params here... */
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
+
